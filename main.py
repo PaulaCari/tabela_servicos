@@ -96,7 +96,86 @@ def calcular_valor (cod, quantidade=None, horas=None, minutos=None, modificacoes
         return 0
     
 
-#5 Criando a lista par armazenar os dados da tabela
+#5 Criando a lista para armazenar os dados da tabela
+tabela_servicos = []
+total_valor = 0
+item_atual = 1
+data_atual = None
+
+
+#6 Loop para receber os dados do usuario e adicionar a tabela
+while True:
+    item = input("Item: ")
+
+    data = input("Data (DD-MM-AAAA): ")
+
+    cod = input("Codigo do Serviço: ")
+
+    referencia = input("Ref.:")
+    #Entrada para os dados especificos
+
+    if cod == '103':
+        quantidade = int(input("Qtd de modelagens: "))
+        h_q_l = f"0/{quantidade}/0"
+        comprimento = 0
+        valor = calcular_valor(cod, quantidade=quantidade)
+
+    elif cod == '106':
+        minutos = float(input("Tiempo em minuto: "))
+        h_q_l = f"{minutos}/0/0"
+        comprimento = 0
+        valor = calcular_valor(cod, minutos=minutos)
+
+    elif cod == '109':
+        modificacoes = int(input("Qtd de modificações: "))
+        h_q_l = f"0/{modificacoes}/0"
+        comprimento = 0
+        valor = calcular_valor(cod, modificacoes=modificacoes)
+
+    elif cod =='205':
+        tamanhos = int(input("Qtd de tamanhos: "))
+        h_q_l = f"0/{tamanhos}/0"
+        comprimento = 0
+        valor = calcular_valor(cod, tamanhos=tamanhos)
+
+    elif cod =='111':
+        quantidade = int(input("Qtd Conversão de Arquivos: "))
+        h_q_l = f"0/{quantidade}/0"
+        comprimento = 0
+        valor = calcular_valor(cod,quantidade=quantidade)
+
+    elif cod == '311':
+        quantidade = int(input("Qtd Reabrir Encaixe: "))
+        h_q_l = f"0/{quantidade}/0"
+        comprimento = 0
+        valor = calcular_valor(cod, quantidade=quantidade)
+
+    elif cod == '304':
+        largura = float(input("H/Q/L - Largura Util: "))
+        comprimento = float(input("Comprimento: "))
+        h_q_l = f"0/0{largura}"
+        valor = calcular_valor(cod, largura=largura, comprimento=comprimento)
+
+    elif cod == '312':
+        quantidade = int(input("Qtd de Miniriscos: "))
+        h_q_l = f"0/{quantidade}/0"
+        comprimento = 0
+        valor = calcular_valor(cod, quantidade=quantidade)
+
+    elif cod == '402':
+        largura = float(input("H/Q/L - Largura: "))
+        comprimento = float(input("Comprimento: "))
+        h_q_l = f"0/0/{largura}"
+        valor = calcular_valor(cod, largura=largura, comprimento=comprimento)
+
+        
+
+
+
+    
+
+    
+
 
     
 
