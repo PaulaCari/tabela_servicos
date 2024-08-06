@@ -23,7 +23,7 @@ def  calcular_valor_103(quantidade):
     return quantidade * 25
 
 def calcular_valor_106(minutos):
-    return (minutos * (80/60),2)
+    return round(minutos * (80/60),2)
 
 def calcular_valor_109(modificacoes):
     return 6 +(modificacoes -1) * 3
@@ -42,7 +42,7 @@ def calcular_valor_304(largura, comprimento):
         return 27.50 #valor fixo <500
     
     else:
-        return round((comprimento * 27.5) / 500, 2) #valor >500
+        return round((comprimento * 27.5) / 500, 2) #valor comprimento >500
     
 def calcular_valor_312(quantidade):
     return quantidade * 6
@@ -51,14 +51,14 @@ def calcular_valor_402(largura, comprimento):
     valor_fixo = 0.00044  #mt quadrado
 
     if largura <= 0 or comprimento <= 0:
-        raise ValueError("largura e comprimento deven er valores Positivos.")
+        raise ValueError("largura e comprimento deven ser valores Positivos.")
     
     valor = largura * comprimento * valor_fixo
     return f"R${valor:.2f}"
 
 
 #3 Função Obter a descrição de serviço
-def obter_descrição(codigo):
+def obter_descricao(codigo):
     return codigos_servicos.get(codigo, "Codigo Invalido")
 
 
@@ -90,8 +90,7 @@ def calcular_valor (cod, quantidade=None, horas=None, minutos=None, modificacoes
         return f"R$ {calcular_valor_312(quantidade): .2f}"
         
     elif cod == '402':
-        return f"R${calcular_valor_402(largura, comprimento): .2f}"
-    
+        return calcular_valor_402(largura, comprimento)  # Retorna a string já formatada
     else:
         return 0
     
@@ -105,15 +104,17 @@ data_atual = None
 
 #6 Loop para receber os dados do usuario e adicionar a tabela
 while True:
-    item = input("Item: ")
+    item = input("Digite o Item: ")
 
     data = input("Data (DD-MM-AAAA): ")
 
-    cod = input("Codigo do Serviço: ")
+    cod = input("Digite o código do serviço: ")
+    descricao = obter_descricao(cod)
 
-    referencia = input("Ref.:")
+    referencia = input("Ref. do cliente:")
     #Entrada para os dados especificos
 
+    # Ajustando a entrada para os códigos específicos
     if cod == '103':
         quantidade = int(input("Qtd de modelagens: "))
         h_q_l = f"0/{quantidade}/0"
@@ -121,7 +122,7 @@ while True:
         valor = calcular_valor(cod, quantidade=quantidade)
 
     elif cod == '106':
-        minutos = float(input("Tiempo em minuto: "))
+        minutos = float(input("H/Q/L-Tiempo em minutos: "))
         h_q_l = f"{minutos}/0/0"
         comprimento = 0
         valor = calcular_valor(cod, minutos=minutos)
@@ -168,7 +169,27 @@ while True:
         h_q_l = f"0/0/{largura}"
         valor = calcular_valor(cod, largura=largura, comprimento=comprimento)
 
-        
+    else:
+        h_q_l = input("Digite H/Q/L (Separados por barras): ")
+        horas,quantidade,largura = map(float, h_q_l.split("/"))
+        comprimento = float(input("Digite o comprimento: "))
+        valor = calcular_valor(cod, horas=horas, largura=largura, comprimento=comprimento)
+
+    #7 Adicionando os dados do serviço a tabela
+    novo_servico = {
+        'item': item_atual,
+        'data': data,
+        'cod': cod,
+        'descricao': descricao,
+        'referencia': referencia,
+        'H/Q/L': h_q_l,
+        'comprimento': comprimento,
+        'valor': valor
+    }
+
+    
+
+
 
 
 
