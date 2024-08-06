@@ -69,25 +69,25 @@ def calcular_valor (cod, quantidade=None, horas=None, minutos=None, modificacoes
         return f"R$ {calcular_valor_103(quantidade):.2f}"
     
     elif cod == '106':
-        return f"R$ {calcular_valor_106(minutos): .2f}"
+        return f"R$ {calcular_valor_106(minutos):.2f}"
     
     elif cod == '109':
-        return f"R$ { calcular_valor_109(modificacoes): .2f}"
+        return f"R$ { calcular_valor_109(modificacoes):.2f}"
     
     elif cod == '205':
-        return f"R$ {calcular_valor_205(tamanhos): .2f}"
+        return f"R$ {calcular_valor_205(tamanhos):.2f}"
     
     elif cod == '111':
-        return f"R$ {calcular_valos_111(quantidade): .2f}"
+        return f"R$ {calcular_valos_111(quantidade):.2f}"
     
     elif cod == '311':
-        return f"R$ { calcular_valor_311(quantidade): .2f}"
+        return f"R$ {calcular_valor_311(quantidade):.2f}"
     
     elif cod == '304':
-        return f"R$ { calcular_valor_304(largura, comprimento): .2f}"
+        return f"R$ {calcular_valor_304(largura, comprimento):.2f}"
     
     elif cod == '312':
-        return f"R$ {calcular_valor_312(quantidade): .2f}"
+        return f"R$ {calcular_valor_312(quantidade):.2f}"
         
     elif cod == '402':
         return calcular_valor_402(largura, comprimento)  # Retorna a string já formatada
@@ -154,7 +154,7 @@ while True:
     elif cod == '304':
         largura = float(input("H/Q/L - Largura Util: "))
         comprimento = float(input("Comprimento: "))
-        h_q_l = f"0/0{largura}"
+        h_q_l = f"0/0/{largura}"
         valor = calcular_valor(cod, largura=largura, comprimento=comprimento)
 
     elif cod == '312':
@@ -187,21 +187,26 @@ while True:
         'valor': valor
     }
 
-    
+    tabela_servicos.append(novo_servico)
+    # CORRIGIDO: Remove a vírgula (,) do valor antes de converter para float
+    total_valor += float(valor.strip("R$ "))
+    #total_valor += float(valor.replace("R$ ", "").replace(".", "")) # Atualizando o total_valor a cada novo serviço 
+    item_atual += 1  # Incrementando o item_atual para o próximo serviço
 
 
+    #8. Perguntando se o usuário deseja adicionar mais um serviço
+    continuar = input("Deseja adicionar mais um serviço? (s/n): ")
+    if continuar.lower() != 's':
+        break
+
+#9. Imprimindo tabela 
+tabela_servicos.append({'item': '', 'data': '', 'cod': '', 'descricao': '', 'referencia': '', 'H/Q/L': '', 'comprimento': 'TOTAL', 'valor': f"R$ {total_valor:.2f}"})
+#valor total na ultima linha
+tabela_servicos[-1]['valor'] = f"R$ {total_valor:.2f}"
 
 
-
-    
-
-    
-
-
-    
-
-
-
-
-
-
+print("-" * 100)
+print("Tabela de Serviços")
+print("-" * 100)
+print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always"))
+print("-" * 100)
