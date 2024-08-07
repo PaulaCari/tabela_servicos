@@ -315,7 +315,6 @@ print("-" * 100)
 print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always", colalign=("center",)*8))  
 print("-" * 100)
 
-
 # 10. Perguntando se o usuário deseja editar algum item
 while True:
     editar = input("Deseja editar algum item da tabela? (s/n): ")
@@ -405,16 +404,106 @@ if editar.lower() == 's':
                         nova_referencia = input("Digite a nova referência do cliente: ")
                         for item in itens_selecionados:
                             item['referencia'] = nova_referencia
+                            
+
                     elif opcao_edicao == 5:  # H/Q/L
-                        while True:
-                            novo_h_q_l = input("Digite o novo valor para H/Q/L (separados por barras): ")
-                            try:
-                                horas, quantidade, largura = map(float, novo_h_q_l.split("/"))
-                                for item in itens_selecionados:
-                                    item['H/Q/L'] = novo_h_q_l
-                                break
-                            except ValueError:
-                                print("Por favor, digite valores numéricos válidos separados por barras.")
+                        # Verifica se o código do serviço é 205
+                        if any(item['cod'] == '205' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novos_tamanhos = int(input("Qtd de tamanhos: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '205':
+                                            item['H/Q/L'] = f"0/{novos_tamanhos}/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '103' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novas_modelagens = int(input("Qtd de modelagens: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '103':
+                                            item['H/Q/L'] = f"0/{novas_modelagens}/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '106' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novos_minutos = float(input("H/Q/L-Tiempo em minutos: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '106':
+                                            item['H/Q/L'] = f"{novos_minutos}/0/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '109' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novas_modificacoes = int(input("Qtd de modificações: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '109':
+                                            item['H/Q/L'] = f"0/{novas_modificacoes}/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '111' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novas_conversoes = int(input("Qtd Conversão de Arquivos: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '111':
+                                            item['H/Q/L'] = f"0/{novas_conversoes}/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '311' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novas_reaberturas = int(input("Qtd Reabrir Encaixe: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '311':
+                                            item['H/Q/L'] = f"0/{novas_reaberturas}/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '312' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    novos_miniriscos = int(input("Qtd de Miniriscos: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '312':
+                                            item['H/Q/L'] = f"0/{novos_miniriscos}/0"  # Atualiza H/Q/L com novos tamanhos
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite um número inteiro válido.")
+                        elif any(item['cod'] == '304' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    nova_largura = float(input("H/Q/L - Largura Util: "))
+                                    novo_comprimento = float(input("Comprimento: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '304':
+                                            item['H/Q/L'] = f"0/0/{nova_largura}"
+                                            item['comprimento'] = novo_comprimento  # Atualiza o comprimento também
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite valores numéricos válidos.")
+                        elif any(item['cod'] == '402' for item in itens_selecionados):
+                            while True:
+                                try:
+                                    nova_largura = float(input("H/Q/L - Largura: "))
+                                    novo_comprimento = float(input("Comprimento: "))
+                                    for item in itens_selecionados:
+                                        if item['cod'] == '402':
+                                            item['H/Q/L'] = f"0/0/{nova_largura}"
+                                            item['comprimento'] = novo_comprimento  # Atualiza o comprimento também
+                                    break
+                                except ValueError:
+                                    print("Por favor, digite valores numéricos válidos.")
+                        # ... (restante do código para editar H/Q/L) ... 
+
                     elif opcao_edicao == 6:  # Comprimento
                         while True:
                             try:
@@ -458,10 +547,3 @@ if editar.lower() == 's':
     # Imprime a tabela com os itens editados (após o loop de edição)
     print("\nTabela de Serviços (Atualizada):")
     print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always", colalign=("center",)*8))
-
-
-
-
-
-
-
