@@ -103,6 +103,8 @@ total_valor = 0
 item_atual = 1
 data_atual = None # Inicializa a data atual como None
 
+print()
+
 #6 Loop para receber os dados do usuario e adicionar a tabela
 while True:
     #item = input("Digite o item: ")
@@ -276,6 +278,9 @@ while True:
     #total_valor += float(valor.replace("R$ ", "").replace(".", "")) # Atualizando o total_valor a cada novo serviço 
     item_atual += 1  # Incrementando o item_atual para o próximo serviço
 
+    
+    print()
+
     #8. Perguntando se o usuário deseja adicionar mais um serviço
     while True:  # Loop para validar a resposta do usuário
         continuar = input("Deseja adicionar mais um serviço? (s/n): ")
@@ -286,6 +291,9 @@ while True:
 
     if continuar.lower() != 's':
         break
+   
+        
+    print()
 
 # 9. Perguntando se o usuário deseja mudar a data
     while True:  # Loop para validar a resposta do usuário
@@ -306,19 +314,26 @@ while True:
                 print("Data inválida. Digite no formato DD-MM-AAAA.")
                 data = input("Digite a nova data (DD-MM-AAAA): ")
     
-
+    
+    print()
+    
 #10. Imprimindo tabela 
 tabela_servicos.append({'item': '', 'data': '', 'cod': '', 'descricao': '', 'referencia': '', 'H/Q/L': 
                         '', 'comprimento': 'TOTAL', 'valor': f"R$ {total_valor:.2f}"})
 #valor total na ultima linha
 tabela_servicos[-1]['valor'] = f"R$ {total_valor:.2f}"
-
+print()
 print("-" * 100)
 print("TABELA DE SERVIÇOS")
 print("-" * 100)
 #print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always", justify='right'))
 print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always", colalign=("center",)*8))  
 print("-" * 100)
+
+print()
+
+
+
 
 # 11. Perguntando se o usuário deseja editar algum item
 while True:
@@ -329,258 +344,208 @@ while True:
         print("Por favor, digite 's'  ou 'n' para não.")
 
 if editar.lower() == 's':
-    # Lista para armazenar os números dos itens
-    itens_a_editar = []
+    
+    print()
+    
+
+    # Loop principal para editar itens
     while True:
-        try:
-            item_a_editar = int(input("Digite o número do item que deseja editar (ou 0 para finalizar): "))
-            if item_a_editar == 0:
-                break
-            itens_a_editar.append(item_a_editar)
-        except ValueError:
-            print("Por favor, digite um número inteiro válido.")
-
-    # Iterando pelos itens a serem editados
-    itens_selecionados = []  # Lista para armazenar os itens selecionados
-    for item_numero in itens_a_editar:
-        # Encontrando o item na lista
-        item_selecionado = next((item for item in tabela_servicos if item['item'] == item_numero), None)
-
-        if item_selecionado:
-            # Adicionando o item selecionado à lista
-            itens_selecionados.append(item_selecionado)
-
-            # Exibindo os dados do item selecionado a tab de cada item selecionado fica redudante
-            #print("\nDados do item selecionado:")
-            #print(tabulate([item_selecionado], headers="keys", tablefmt="grid"))
-
-        else:
-            print(f"Item {item_numero} não encontrado.")
-
-    # Imprimindo os itens selecionados após o loop
-    if itens_selecionados:
-        print("\nItens selecionados:")
-        print(tabulate(itens_selecionados, headers="keys", tablefmt="grid"))
-
-    # Mostrando as opções de edição (fora do loop)
-    if itens_selecionados:
-        print("\nOpções de edição:")
-        print("1. Data")
-        print("2. Código do serviço")
-        print("3. Descrição")
-        print("4. Referência do cliente")
-        print("5. H/Q/L")
-        print("6. Comprimento")
-        print("7. Valor")
-        print("0. Terminar edição dos itens")  # Opção para sair do loop
-        print()
+        # Lista para armazenar os números dos itens
+        itens_a_editar = []
         while True:
-            try:
-                opcao_edicao = int(input("Digite o número da opção que deseja editar: "))
-                if opcao_edicao == 0:
-                    break  # Sai do loop se o usuário digitar 0
-                elif 1 <= opcao_edicao <= 7:
-
-                    # Editar o campo selecionado
-                    if opcao_edicao == 1:  # Data
-                        while True:
-                            nova_data = input("Digite a nova data (DD-MM-AAAA): ")
-                            try:
-                                datetime.datetime.strptime(nova_data, "%d-%m-%Y")  # Tenta converter a data para verificar se o formato está correto
-                                for item in itens_selecionados:
-                                    item['data'] = nova_data  # Atualiza a data no item
-                                break  # Sai do loop se a data for válida
-                            except ValueError:
-                                print("Data inválida. Por favor, digite no formato DD-MM-AAAA.")
-
-                    elif opcao_edicao == 2:  # Código do serviço
-                        while True:
-                            novo_cod = input("Digite o novo código do serviço: ")
-                            if novo_cod in codigos_servicos:
-                                for item in itens_selecionados:
-                                    item['cod'] = novo_cod
-                                    item['descricao'] = codigos_servicos[novo_cod]  # Atualiza a descrição também
-                                break
-                            else:
-                                print("Código de serviço inválido. Por favor, tente novamente.")
-
-                    elif opcao_edicao == 3:  # Descrição
-                        nova_descricao = input("Digite a nova descrição: ")
-                        for item in itens_selecionados:
-                            item['descricao'] = nova_descricao
-
-                    elif opcao_edicao == 4:  # Referência do cliente
-                        nova_referencia = input("Digite a nova referência do cliente: ")
-                        for item in itens_selecionados:
-                            item['referencia'] = nova_referencia
-                            
-
-                    elif opcao_edicao == 5:  # H/Q/L
-                        # Verifica se o código do serviço é 205
-                        if any(item['cod'] == '205' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novos_tamanhos = int(input("Qtd de tamanhos: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '205':
-                                            item['H/Q/L'] = f"0/{novos_tamanhos}/0"  # Atualiza H/Q/L com novos tamanhos
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        elif any(item['cod'] == '103' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novas_modelagens = int(input("Qtd de modelagens: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '103':
-                                            item['H/Q/L'] = f"0/{novas_modelagens}/0"  # Atualiza H/Q/L com novos tamanhos
-                                            item['valor'] = f"R$ {calcular_valor_103(novas_modelagens):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        elif any(item['cod'] == '106' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novos_minutos = float(input("H/Q/L-Tiempo em minutos: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '106':
-                                            item['H/Q/L'] = f"{novos_minutos}/0/0"  # Atualiza H/Q/L com novos tamanhos
-                                            item['valor'] = f"R$ {calcular_valor_106(novos_minutos):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        elif any(item['cod'] == '109' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novas_modificacoes = int(input("Qtd de modificações: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '109':
-                                            item['H/Q/L'] = f"0/{novas_modificacoes}/0"  # Atualiza H/Q/L com novos tamanhos
-                                            item['valor'] = f"R$ {calcular_valor_109(novas_modificacoes):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        elif any(item['cod'] == '111' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novas_conversoes = int(input("Qtd Conversão de Arquivos: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '111':
-                                            item['H/Q/L'] = f"0/{novas_conversoes}/0"  # Atualiza H/Q/L com novos tamanhos
-                                            item['valor'] = f"R$ {calcular_valor_111(novas_conversoes):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        elif any(item['cod'] == '311' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novas_reaberturas = int(input("Qtd Reabrir Encaixe: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '311':
-                                            item['H/Q/L'] = f"0/{novas_reaberturas}/0"  # Atualiza H/Q/L com novos tamanhos
-                                            item['valor'] = f"R$ {calcular_valor_311(novas_reaberturas):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        elif any(item['cod'] == '312' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    novos_miniriscos = int(input("Qtd de Miniriscos: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '312':
-                                            item['H/Q/L'] = f"0/{novos_miniriscos}/0"  # Atualiza H/Q/L com novos tamanhos
-                                            item['valor'] = f"R$ {calcular_valor_312(novos_miniriscos):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite um número inteiro válido.")
-
-                        
-                            
-                        elif any(item['cod'] == '304' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    nova_largura = float(input("H/Q/L - Largura Util: "))
-                                    novo_comprimento = float(input("Comprimento: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '304':
-                                            item['H/Q/L'] = f"0/0/{nova_largura}"
-                                            item['comprimento'] = novo_comprimento  # Atualiza o comprimento também
-                                            # Utiliza a função calcular_valor_304 para calcular o valor correto
-                                            # Extrai a largura atual do campo H/Q/L
-                                            largura_atual = float(item['H/Q/L'].split('/')[-1])
-                                            # Utiliza a função calcular_valor_304 para calcular o valor correto
-                                            item['valor'] = f"R$ {calcular_valor_304(largura_atual, novo_comprimento):.2f}"  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite valores numéricos válidos.") 
-
-
-                        elif any(item['cod'] == '402' for item in itens_selecionados):
-                            while True:
-                                try:
-                                    nova_largura = float(input("H/Q/L - Largura: "))
-                                    novo_comprimento = float(input("Comprimento: "))
-                                    for item in itens_selecionados:
-                                        if item['cod'] == '402':
-                                            item['H/Q/L'] = f"0/0/{nova_largura}"
-                                            item['comprimento'] = novo_comprimento  # Atualiza o comprimento também
-                                            # Utiliza a função calcular_valor_402 para calcular o valor correto com os novos valores
-                                            item['valor'] = calcular_valor_402(nova_largura, novo_comprimento)  # Recalcula o valor
-                                    break
-                                except ValueError:
-                                    print("Por favor, digite valores numéricos válidos.")
-
-                                    
-
-                    elif opcao_edicao == 6:  # Comprimento
-                        while True:
-                            try:
-                                novo_comprimento = float(input("Digite o novo comprimento: "))
-                                if novo_comprimento >= 0:
-                                    for item in itens_selecionados:
-                                        item['comprimento'] = novo_comprimento
-                                    break
-                                else:
-                                    print("O comprimento deve ser um valor positivo.")
-                            except ValueError:
-                                print("Por favor, digite um valor numérico válido.")
-
-                    elif opcao_edicao == 7:  # Valor
-                        while True:
-                            novo_valor = input("Digite o novo valor: ")
-                            try:
-                                novo_valor = float(novo_valor.replace("R$ ", "").replace(",", "."))  # Remove "R$ " e "," para converter para float
-                                for item in itens_selecionados:
-                                    item['valor'] = f"R$ {novo_valor:.2f}"
-                                break
-                            except ValueError:
-                                print("Por favor, digite um valor numérico válido.")
-
-
-                    # Atualiza o valor total (após editar o valor do serviço)
-                    total_valor = sum(float(item['valor'].replace("R$ ", "").replace(",", ".")) for item in tabela_servicos if item['comprimento'] != 'TOTAL')
-                    tabela_servicos[-1]['valor'] = f"R$ {total_valor:.2f}"  # Atualiza o valor total na última linha da tabela
-
-                    # Perguntar se o usuário deseja editar outro campo
+            # Lista auxiliar para armazenar os itens selecionados temporariamente
+            itens_selecionados_temp = []
+            while True:
+                try:
+                    item_a_editar = int(input("Quais são os números dos item que deseja editar? (ou 0 para finalizar): "))
+                    if item_a_editar == 0:
+                        break
+                    # Validação da entrada do usuário
                     while True:
-                        editar_outro_campo = input("Deseja editar outro campo? (s/n): ")
-                        if editar_outro_campo.lower() in ('s', 'n'):
+                        if 1 <= item_a_editar <= len(tabela_servicos) - 1:  # Verifica se o item está dentro do intervalo válido
+                            itens_selecionados_temp.append(item_a_editar)
                             break
                         else:
-                            print("Por favor, digite 's'  ou 'n' para não.")
-                    if editar_outro_campo.lower() != 's':
-                        break # Sai do loop de edição de campos
-                    
-                    
+                            print("Número de item inválido. Por favor, digite um número válido.")
+                            item_a_editar = int(input("Quais são os números dos item que deseja editar? (ou 0 para finalizar): "))
+                except ValueError:
+                    print("Por favor, digite um número inteiro válido.")
+
+            # Perguntar ao usuário se ele deseja confirmar a seleção
+            if itens_selecionados_temp:
+                print("\nItens selecionados:")
+                #print(tabulate([{'item': i} for i in itens_selecionados_temp], headers=["item"], tablefmt="grid"))
+                while True:
+                    confirmacao = input("Confirma a seleção? (s/n): ")
+                    if confirmacao.lower() in ('s', 'n'):
+                        break
+                    else:
+                        print("Por favor, digite 's' ou 'n'.")
+                if confirmacao.lower() == 's':
+                    # Copiar os itens selecionados para a lista final
+                    itens_a_editar = itens_selecionados_temp.copy()
+                    break  # Sai do loop principal
+                else:
+                    # Limpar a lista auxiliar
+                    itens_selecionados_temp.clear()
+
+        # Iterando pelos itens a serem editados
+        itens_selecionados = []  # Lista para armazenar os itens selecionados
+        for item_numero in itens_a_editar:
+            # Encontrando o item na lista
+            item_selecionado = next((item for item in tabela_servicos if item['item'] == item_numero), None)
+
+            if item_selecionado:
+                # Adicionando o item selecionado à lista
+                itens_selecionados.append(item_selecionado)
+
+                # Exibindo os dados do item selecionado a tab de cada item selecionado fica redudante
+                #print("\nDados do item selecionado:")
+                #print(tabulate([item_selecionado], headers="keys", tablefmt="grid"))
+
+            else:
+                print(f"Item {item_numero} não encontrado.")
+
+        # Imprimindo os itens selecionados após o loop
+        if itens_selecionados:
+            print("\nItens selecionados:")
+            print(tabulate(itens_selecionados, headers="keys", tablefmt="grid"))
+
+        
+        print()
+
+        # Pede para o usuário selecionar o item a ser editado
+        while True:
+            try:
+                item_a_editar = int(input("Qual item deseja editar primeiro?: "))
+                # Verifica se o item está na lista de itens selecionados:
+                if 1 <= item_a_editar <= len(itens_selecionados):  # Validação corrigida: de 1 até o tamanho da lista
+                    break
+                else:
+                    print("Número de item inválido. Por favor, digite um número válido da tabela.")
             except ValueError:
                 print("Por favor, digite um número inteiro válido.")
 
-    # Imprime a tabela com os itens editados (após o loop de edição)
-    print("\nTabela de Serviços (Atualizada):")
-    print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always", colalign=("center",)*8))
+        # Seleciona o item a ser editado
+        item_selecionado = itens_selecionados[item_a_editar - 1]  # Usa o índice correto (lembrando que a numeração da tabela começa em 1)
+
+        print()
+        
+      
+        # Mostrando as opções de edição (fora do loop)
+        if itens_selecionados:
+            print("\nOpções de edição:")
+            print("1. Data")
+            print("2. Código do serviço")
+            print("3. Descrição")
+            print("4. Referência do cliente")
+            print("5. H/Q/L")
+            print("6. Comprimento")
+            print("7. Valor")
+            print("0. Terminar edição dos itens")  # Opção para sair do loop
+            print()
+
+
+            while True:
+                try:
+                    opcao_edicao = int(input("Selecione um Numero na Opção de edição: "))
+                    if opcao_edicao == 0:
+                        break  # Sai do loop se o usuário digitar 0
+                    elif 1 <= opcao_edicao <= 7:
+
+                        # Editar o campo selecionado
+                        if opcao_edicao == 1:  # Data
+                            while True:
+                                nova_data = input(f"Digite a nova data (DD-MM-AAAA) (item {item_selecionado['item']}): ")
+                                try:
+                                    datetime.datetime.strptime(nova_data, "%d-%m-%Y")  # Tenta converter a data para verificar se o formato está correto
+                                    item_selecionado['data'] = nova_data  # Atualiza a data no item
+                                    break  # Sai do loop se a data for válida
+                                except ValueError:
+                                    print("Data inválida. Por favor, digite no formato DD-MM-AAAA.")
+
+                        elif opcao_edicao == 2:  # Código do serviço
+                            while True:
+                                novo_cod = input(f"Digite o novo código do serviço (item {item_selecionado['item']}): ")
+                                if novo_cod in codigos_servicos:
+                                    item_selecionado['cod'] = novo_cod
+                                    item_selecionado['descricao'] = codigos_servicos[novo_cod]  # Atualiza a descrição também
+                                    item_selecionado['valor'] = f"R$ {calcular_valor(novo_cod):.2f}"  # Calcula e atualiza o valor
+                                    break
+                                else:
+                                    print("Código de serviço inválido. Por favor, tente novamente.")
+
+                        elif opcao_edicao == 3:  # Descrição
+                            nova_descricao = input(f"Digite a nova descrição (item {item_selecionado['item']}): ")
+                            item_selecionado['descricao'] = nova_descricao
+
+                        elif opcao_edicao == 4:  # Referência do cliente
+                            nova_referencia = input(f"Digite a nova referência do cliente (item {item_selecionado['item']}): ")
+                            item_selecionado['referencia'] = nova_referencia
+
+                        elif opcao_edicao == 5:  # H/Q/L
+                                
+                                if item_selecionado['cod'] == '103':
+                                    while True:
+                                        try:
+                                            novas_modelagens = int(input(f"Qtd de modelagens (Item {item_selecionado['item']}): "))
+                                            item_selecionado['H/Q/L'] = f"0/{novas_modelagens}/0"  # Atualiza H/Q/L com novos tamanhos
+                                            item_selecionado['valor'] = f"R$ {calcular_valor_103(novas_modelagens):.2f}"  # Recalcula o valor
+                                            break
+                                        except ValueError:
+                                            print("Por favor, digite um número inteiro válido.")
+
+
+                                elif item_selecionado['cod'] == '106':
+                                    while True:
+                                        try:
+                                            novos_minutos = float(input(f"H/Q/L-Tiempo em minutos (Item {item_selecionado['item']}): "))
+                                            item_selecionado['H/Q/L'] = f"{novos_minutos}/0/0"  # Atualiza H/Q/L com novos tamanhos
+                                            item_selecionado['valor'] = f"R$ {calcular_valor_106(novos_minutos):.2f}"  # Recalcula o valor
+                                            break
+                                        except ValueError:
+                                            print("Por favor, digite um número inteiro válido.")
+
+                       
+
+                        total_valor = sum(float(item['valor'].replace("R$ ", "").replace(",", ".")) for item in tabela_servicos if item['comprimento'] != 'TOTAL')
+                        tabela_servicos[-1]['valor'] = f"R$ {total_valor:.2f}"  # Atualiza o valor total na última linha da tabela
+
+                
+                        
+                  
+
+                        
+
+                        print()
+                        # Perguntar se o usuário deseja editar outro campo
+                        while True:
+                            editar_outro_campo = input("Deseja editar outro campo? (s/n): ")
+                            if editar_outro_campo.lower() in ('s', 'n'):
+                                break
+                            else:
+                                print("Por favor, digite 's'  ou 'n' para não.")
+                        if editar_outro_campo.lower() != 's':
+                            break # Sai do loop de edição de campos
+
+                except ValueError:
+                    print("Por favor, digite um número inteiro válido.")
+
+                print()
+
+        # Imprime a tabela com os itens editados (após o loop de edição)
+        print("\nTabela de Serviços (Atualizada):")
+        print(tabulate(tabela_servicos, headers="keys", tablefmt="grid",  showindex="always", colalign=("center",)*8))
+
+        print()
+
+        # Pergunta se o usuário deseja editar outro item
+        while True:
+            editar_outro_item = input("Deseja editar outro item? (s/n): ")
+            if editar_outro_item.lower() in ('s', 'n'):
+                break
+            else:
+                print("Por favor, digite 's' ou 'n'.")
+
+        if editar_outro_item.lower() != 's':
+            break  # Sai do loop principal se o usuário responder "n"
